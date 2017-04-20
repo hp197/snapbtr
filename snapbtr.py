@@ -205,6 +205,7 @@ def cleandir(operations, targets):
     keep_backups = targets.keep_backups
     target_fsp = targets.target_freespace
     target_backups = targets.target_backups
+    target_removed = targets.target_removed
     was_above_target_freespace = None
     was_above_target_backups = None
     last_dirs = []
@@ -229,6 +230,12 @@ def cleandir(operations, targets):
             if dirs_len <= keep_backups:
                 print "Reached number of backups to keep: ", dirs_len
                 break
+
+        if target_removed is not None:
+            if target_removed <= 0:
+                print "Reached max numbers of snapshots to delete"
+                break
+            target_removed -= 1
 
         if target_fsp is not None:
             fsp = operations.freespace()
@@ -337,6 +344,13 @@ def main(argv):
                             help = '''Cleanup PATH until at least SIZE is free.
 
 SIZE is #bytes, or given with K, M, G or T respectively for kilo, ...''')
+
+        target_group.add_argument('--max-removed', '-M',
+                                  dest = 'target_removed',
+                                  default = None,
+                                  metavar = '#', type = int,
+                                  help = 'Cleanup max # snapshots each run')
+
         target_group.add_argument('--target-backups', '-B',
                                   dest='target_backups',
                                   metavar = '#', type = int,
