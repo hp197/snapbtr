@@ -1,7 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# Autor: Helge Jensen <hej@actua.dk>
+# Original Autor: Helge Jensen <hej@actua.dk>
+# Maintained by: Henry Paulissen <henry@nitronetworks.nl>
+# 
+# URL: https://github.com/hp197/snapbtr
+#
 """
 snapbtr is a small utility that keeps snapshots of btrfs filesystems.
 
@@ -286,7 +290,8 @@ def main(argv):
                     None: 0,
                     'K': 1,
                     'M': 2,
-                    'G': 3 }
+                    'G': 3,
+                    'T': 4 }
                 form = "([0-9]+)(%s)?" % \
                     "|".join(x for x in mods.iterkeys() if x is not None)
                 m = re.match(form, target_str, re.IGNORECASE)
@@ -341,7 +346,7 @@ SIZE is #bytes, or given with K, M, G or T respectively for kilo, ...''')
                             metavar = '#', type = int,
                                   default = DEFAULT_KEEP_BACKUPS,
                                   help = 'Stop cleaning when K backups remain')
-    
+
         snap_group_x = parser.add_argument_group(
             title = 'Snapshotting')
         snap_group = parser.add_mutually_exclusive_group(required=False)
